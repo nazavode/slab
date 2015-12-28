@@ -1,0 +1,4 @@
+# pytest and extensions:
+pytest
+pytest-cov
+pytest-sugar
