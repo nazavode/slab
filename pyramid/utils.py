@@ -44,7 +44,7 @@ def listcontent(path):
         else:
             files.add(entry.path)
     return files, subdirs
-g
+
 
 def is_excluded(path, excludes):
     return any(fnmatch.fnmatch(os.path.normpath(os.path.basename(path)), pattern) for pattern in excludes)
