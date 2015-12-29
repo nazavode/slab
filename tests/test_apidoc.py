@@ -12,8 +12,8 @@ from fixtures import *
 
 def test_compare(flags, command, packagedir, tmpdir):
     # Create output directories
-    my_outdir = 'pyramid-out' # str(tmpdir.join('pyramid'))
-    theirs_outdir = 'compare-out' # str(tmpdir.join('compare'))
+    my_outdir = str(tmpdir.join('pyramid'))
+    theirs_outdir = str(tmpdir.join('compare'))
     os.makedirs(my_outdir)
     os.makedirs(theirs_outdir)
     # Create command lines

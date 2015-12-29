@@ -44,14 +44,16 @@ class Directory(Node):
         files, subdirs = listcontent(self.path)
         self.is_package = is_package(self.path, filelist=files)
         self.submodules = sorted(
-                Module(file, self.root) for file in files if is_source(file) and not is_excluded(file, self.excludes)
+                Module(file, self.root) for file in sorted(files)
+                if is_source(file) and not is_excluded(file, self.excludes)
         )
         self.subdirs = sorted(
-            Directory(subdir, self.root, excludes) for subdir in subdirs
+            Directory(subdir, self.root, excludes) for subdir in sorted(subdirs)
             if not is_excluded(subdir, self.excludes)
         )
         self.subpackages = sorted(
-            subdir for subdir in self.subdirs if subdir.is_package
+            subdir for subdir in self.subdirs
+            if subdir.is_package
         )
         self.is_empty = not self.submodules and not self.subdirs
 
