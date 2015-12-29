@@ -133,10 +133,11 @@ def apidoc_get_package(package, include_submodules, headings, modulefirst, apido
                 if headings:
                     text += apidoc_format_heading(2, '%s module' % submodule.qualname)
                 # Force headings to disabled state as done by apidoc:
-                text += apidoc_get_module(submodule, headings=False, apidoc_options=apidoc_options) + '\n\n'
+                text += apidoc_get_module(submodule, headings=False, apidoc_options=apidoc_options)
         else:
             text += '.. toctree::\n\n' + \
-                    '\n'.join('   {}'.format(submodule.qualname) for submodule in package.submodules) + '\n\n'
+                    '\n'.join('   {}'.format(submodule.qualname) for submodule in package.submodules)
+        text += '\n\n'
 
     title = apidoc_format_heading(1, '{} package'.format(package.qualname))
     if modulefirst:

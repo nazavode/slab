@@ -23,7 +23,7 @@ def test_compare(flags, command, packagedir, tmpdir):
     assert subprocess.call(my_cmdline.split()) == 0
     assert subprocess.call(theirs_cmdline.split()) == 0
     # Compare
-    cmp = filecmp.dircmp(str(my_outdir), str(theirs_outdir))
+    cmp = filecmp.dircmp(my_outdir, theirs_outdir)
     assert len(cmp.left_only) == 0
     assert len(cmp.right_only) == 0
     assert len(cmp.funny_files) == 0
