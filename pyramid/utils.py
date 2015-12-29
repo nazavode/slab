@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
 
-"""
-
-# import
 import ast
 import fnmatch
 import os
 
-from pyramid.config import INITPY_FILENAME, SOURCE_SUFFIXES
+from .config import INITPY_FILENAME, SOURCE_SUFFIXES
+
 
 __all__ = ()
 

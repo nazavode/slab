@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import os
 import functools
 
-from pyramid.apidoc import apidoc_get_module, apidoc_get_package
-from pyramid.utils import is_package, is_source, get_node_name, get_node_qualname, listcontent, is_excluded, \
-    get_module_imports
+from .utils import (
+    get_node_name,
+    get_node_qualname,
+    listcontent,
+    is_package,
+    is_source,
+    is_excluded,
+    get_module_imports,
+)
 
 
 def build_tree(root_path, excludes=None):
     return Directory(root_path, excludes=excludes)
-
 
 @functools.total_ordering
 class Node(object):
@@ -65,72 +69,72 @@ class Module(Node):
         self.imports = get_module_imports(self.path)
 
 
-###############################################################################
-# Info configuration
-
-def apidoc_get_maker(opts, key='apidoc'):
-
-    def get_apidoc(node):
-        if isinstance(node, Directory) and node.is_package:
-            return {
-                key:
-                apidoc_get_package(
-                        node,
-                        include_submodules=not opts.separatemodules,
-                        headings=not opts.noheadings,
-                        modulefirst=opts.modulesfirst,
-                        apidoc_options=opts.apidoc_options
-                )
-            }
-        elif isinstance(node, Module):
-            return {
-                key:
-                apidoc_get_module(
-                        node,
-                        headings=not opts.noheadings,
-                        apidoc_options=opts.apidoc_options
-                )
-            }
-        else:
-            return {}
-
-    return get_apidoc
-
-
-def template_get_maker(options, key='template'):
-
-    def get_template(node):
-        return {
-            key: 'TEMPLATE TODO'  # TODO
-        }
-
-    return get_template
-
-
-def outpath_get_maker(options, key='outpath'):
-
-    def get_output_path(node):
-        return {
-            key: os.path.abspath(os.path.join(options.destdir, node.qualname + '.' + options.suffix))
-        }
-
-    return get_output_path
-
-
-def info_get_maker(options):
-    factories = (
-        apidoc_get_maker(options),
-        template_get_maker(options),
-        outpath_get_maker(options),
-    )
-
-    def get_info(node):
-        info = {}
-        for factory in factories:
-            info.update(factory(node))
-        return info
-
-    return get_info
+# ###############################################################################
+# # Info configuration
+#
+# def apidoc_get_maker(opts, key='apidoc'):
+#
+#     def get_apidoc(node):
+#         if isinstance(node, Directory) and node.is_package:
+#             return {
+#                 key:
+#                 apidoc_get_package(
+#                         node,
+#                         include_submodules=not opts.separatemodules,
+#                         headings=not opts.noheadings,
+#                         modulefirst=opts.modulesfirst,
+#                         apidoc_options=opts.apidoc_options
+#                 )
+#             }
+#         elif isinstance(node, Module):
+#             return {
+#                 key:
+#                 apidoc_get_module(
+#                         node,
+#                         headings=not opts.noheadings,
+#                         apidoc_options=opts.apidoc_options
+#                 )
+#             }
+#         else:
+#             return {}
+#
+#     return get_apidoc
+#
+#
+# def template_get_maker(options, key='template'):
+#
+#     def get_template(node):
+#         return {
+#             key: 'TEMPLATE TODO'  # TODO
+#         }
+#
+#     return get_template
+#
+#
+# def outpath_get_maker(options, key='outpath'):
+#
+#     def get_output_path(node):
+#         return {
+#             key: os.path.abspath(os.path.join(options.destdir, node.qualname + '.' + options.suffix))
+#         }
+#
+#     return get_output_path
+#
+#
+# def info_get_maker(options):
+#     factories = (
+#         apidoc_get_maker(options),
+#         template_get_maker(options),
+#         outpath_get_maker(options),
+#     )
+#
+#     def get_info(node):
+#         info = {}
+#         for factory in factories:
+#             info.update(factory(node))
+#         return info
+#
+#     return get_info
 
 
 def dump(root, info_maker, exclude_types=None):
