@@ -38,14 +38,13 @@ def get_node_qualname(path, root_path):
 def listcontent(path):
     subdirs = set()
     files = set()
-    for entry in os.listdir(path):
-        entry = os.path.join(path, entry)
-        if os.path.isdir(entry):
-            subdirs.add(entry)
+    for entry in os.scandir(path):
+        if entry.is_dir():
+            subdirs.add(entry.path)
         else:
-            files.add(entry)
+            files.add(entry.path)
     return files, subdirs
-
+g
 
 def is_excluded(path, excludes):
     return any(fnmatch.fnmatch(os.path.normpath(os.path.basename(path)), pattern) for pattern in excludes)
