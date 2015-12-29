@@ -28,4 +28,4 @@ def test_compare(flags, command, packagedir, tmpdir):
     assert len(cmp.right_only) == 0
     assert len(cmp.funny_files) == 0
     assert len(cmp.diff_files) == 0
-    cmp.report_full_closure()
+
