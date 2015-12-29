@@ -33,7 +33,6 @@ class Node(object):
     def docitems(self):
         yield self
         for node in itertools.chain(self.subpackages, self.submodules):
-            yield node
             yield from node.docitems()
 
     def __lt__(self, other):
