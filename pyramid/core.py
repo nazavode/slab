@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import functools
 
 from pyramid.apidoc import apidoc_get_module, apidoc_get_package
 from pyramid.utils import is_package, is_source, get_node_name, get_node_qualname, listcontent, is_excluded, \
@@ -11,6 +12,7 @@ def build_tree(root_path, excludes=None):
     return Directory(root_path, excludes=excludes)
 
 
+@functools.total_ordering
 class Node(object):
 
     def __init__(self, path, root=None):
@@ -42,7 +44,7 @@ class Directory(Node):
         files, subdirs = listcontent(self.path)
         self.is_package = is_package(self.path, filelist=files)
         self.submodules = sorted(
-                Module(file, self.root) for file in files if not is_excluded(file, self.excludes) and is_source(file)
+                Module(file, self.root) for file in files if is_source(file) and not is_excluded(file, self.excludes)
         )
         self.subdirs = sorted(
             Directory(subdir, self.root, excludes) for subdir in subdirs

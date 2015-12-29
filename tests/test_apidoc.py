@@ -12,15 +12,15 @@ from fixtures import *
 
 def test_compare(flags, command, packagedir, tmpdir):
     # Create output directories
-    my_outdir = str(tmpdir.join('pyramid'))
-    theirs_outdir = str(tmpdir.join('compare'))
+    my_outdir = 'pyramid-out' # str(tmpdir.join('pyramid'))
+    theirs_outdir = 'compare-out' # str(tmpdir.join('compare'))
     os.makedirs(my_outdir)
     os.makedirs(theirs_outdir)
     # Create command lines
-    my_cmdline = 'pyramid-apidoc ' + flags.format(outdir=my_outdir, package=os.path.abspath(packagedir))
-    theirs_cmdline = command + ' ' + flags.format(outdir=theirs_outdir, package=os.path.abspath(packagedir))
+    my_cmdline = 'pyramid-apidoc ' + flags.format(outdir=my_outdir, package=packagedir)
+    theirs_cmdline = command + ' ' + flags.format(outdir=theirs_outdir, package=packagedir)
     # Run commands
-    # subprocess.call(my_cmdline.split())
+    subprocess.call(my_cmdline.split())
     subprocess.call(theirs_cmdline.split())
     # Compare
     cmp = filecmp.dircmp(str(my_outdir), str(theirs_outdir))

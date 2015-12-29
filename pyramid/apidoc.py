@@ -68,7 +68,7 @@ def apidoc_get_package(package, include_submodules, headings, modulefirst, apido
         text = title + apidoc_get_module(package, headings=False, apidoc_options=apidoc_options) + '\n' + text
     else:
         # Force headings to disabled state as done by apidoc:
-        text = title + text + '\n' + apidoc_format_heading(2, 'Module contents') + \
+        text = title + text + apidoc_format_heading(2, 'Module contents') + \
                apidoc_get_module(package, headings=False, apidoc_options=apidoc_options)
 
     return text

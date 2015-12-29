@@ -21,7 +21,7 @@ apidoc_commands = [
 ]
 
 testpackages = [
-    ("testpackage", 'testdata/testpackage'),
+    ("testpackage", 'data/testpackage'),
 ]
 
 
