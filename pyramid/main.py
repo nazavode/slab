@@ -70,7 +70,7 @@ def get_parser():
                             'If omitted, the value of environment variable '
                             'SPHINX_APIDOC_OPTIONS will be used.')
     extra.add_argument('--toc-filename',
-                       dest='toc_filename', default='modules.rst',
+                       dest='toc_filename', default='modules',
                        help='Toc filename.')
     return parser
 
@@ -92,7 +92,7 @@ def main(argv):
     dump(root, info_maker, no_dump_types)
 
     if not args.notoc:
-        with open(os.path.join(args.destdir, args.toc_filename), 'w') as f:
+        with open(os.path.join(args.destdir, args.toc_filename + '.' + args.suffix), 'w') as f:
             f.write(apidoc.apidoc_get_modules_toc((root, ), header=root.name, maxdepth=args.maxdepth))
 
     # 2. Purge tree from excluded nodes

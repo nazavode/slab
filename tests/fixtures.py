@@ -18,6 +18,8 @@ apidoc_flags = [
     '--separate',
     '--no-headings',
     '--no-toc',
+    '--maxdepth=1000',
+    '--suffix=TEST',
 ]
 
 apidoc_test_flags = (
