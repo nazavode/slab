@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import functools
+import itertools
 
 from .utils import (
     get_node_name,
@@ -16,6 +17,7 @@ from .utils import (
 def build_tree(root_path, excludes=None):
     return Directory(root_path, excludes=excludes)
 
+
 @functools.total_ordering
 class Node(object):
 
@@ -27,6 +29,12 @@ class Node(object):
         self.submodules = tuple()
         self.subdirs = tuple()
         self.subpackages = tuple()
+
+    def docitems(self):
+        yield self
+        for node in itertools.chain(self.subpackages, self.submodules):
+            yield node
+            yield from node.docitems()
 
     def __lt__(self, other):
         self.qualname.__lt__(other.qualname)

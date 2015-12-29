@@ -17,7 +17,7 @@ def test_compare(flags, command, packagedir, tmpdir):
     os.makedirs(my_outdir)
     os.makedirs(theirs_outdir)
     # Create command lines
-    my_cmdline = 'pyramid-apidoc ' + flags.format(outdir=my_outdir, package=packagedir)
+    my_cmdline = pyramid_exe + ' ' + flags.format(outdir=my_outdir, package=packagedir)
     theirs_cmdline = command + ' ' + flags.format(outdir=theirs_outdir, package=packagedir)
     # Run commands
     assert subprocess.call(my_cmdline.split()) == 0

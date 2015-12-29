@@ -10,7 +10,10 @@ __all__ = (
     'flags',
     'command',
     'packagedir',
+    'pyramid_exe',
 )
+
+pyramid_exe = 'pyramid-apidoc'
 
 apidoc_flags = [
     '',

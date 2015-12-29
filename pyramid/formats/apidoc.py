@@ -58,7 +58,7 @@ class ApidocReSTFormat(FormatBase):
         )
 
     @classmethod
-    def options(cls, parser):
+    def add_arguments(cls, parser):
         apidoc = parser.add_argument_group('Apidoc format options', 'Options inherited from sphinx.apidoc command.')
         apidoc.add_argument('-E', '--no-headings', action='store_true',
                             dest='noheadings',
@@ -109,6 +109,8 @@ def apidoc_get_module(module, headings, apidoc_options):
 
 
 def apidoc_get_modules_toc(modules, header, maxdepth):
+    if header is None:
+        header = modules[0].qualname
     text = apidoc_format_heading(1, '{}'.format(header)) + '.. toctree::\n'
     if maxdepth is not None:
         text += '   :maxdepth: {}\n\n'.format(maxdepth)
