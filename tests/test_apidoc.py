@@ -20,8 +20,8 @@ def test_compare(flags, command, packagedir, tmpdir):
     my_cmdline = 'pyramid-apidoc ' + flags.format(outdir=my_outdir, package=packagedir)
     theirs_cmdline = command + ' ' + flags.format(outdir=theirs_outdir, package=packagedir)
     # Run commands
-    subprocess.call(my_cmdline.split())
-    subprocess.call(theirs_cmdline.split())
+    assert subprocess.call(my_cmdline.split()) == 0
+    assert subprocess.call(theirs_cmdline.split()) == 0
     # Compare
     cmp = filecmp.dircmp(str(my_outdir), str(theirs_outdir))
     assert len(cmp.left_only) == 0

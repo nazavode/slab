@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-
+import itertools
 import pytest
 
 from pyramid import *  # this is going to test package's __init__ exports
@@ -12,9 +12,19 @@ __all__ = (
     'packagedir',
 )
 
-apidoc_command_lines = [
-    ("simple", '-o {outdir} {package}'),
+apidoc_flags = [
+    '',
+    '--module-first',
+    '--separate',
+    '--no-headings',
+    '--no-toc',
 ]
+
+apidoc_test_flags = (
+    itertools.chain.from_iterable(
+            itertools.combinations(apidoc_flags, r=i) for i in range(len(apidoc_flags))
+    )
+)
 
 apidoc_commands = [
     ("sphinx", 'sphinx-apidoc'),
@@ -25,9 +35,9 @@ testpackages = [
 ]
 
 
-@pytest.fixture(params=[e[1] for e in apidoc_command_lines], ids=[e[0] for e in apidoc_command_lines])
+@pytest.fixture(params=apidoc_test_flags)
 def flags(request):
-    return request.param
+    return ' '.join(request.param) + ' -o {outdir} {package}'
 
 
 @pytest.fixture(params=[e[1] for e in apidoc_commands], ids=[e[0] for e in apidoc_commands])
