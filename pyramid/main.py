@@ -5,7 +5,7 @@ import os
 
 from .utils import argtype_dir_input, argtype_dir_output
 from .config import AUTODOC_OPTIONS
-from .core import build_tree, Module  # TODO
+from .core import build_tree, Module
 from .formats import apidoc, template
 
 __all__ = (
@@ -53,7 +53,7 @@ def get_parser(supported_formats):
                        dest='toc_filename', default='modules',
                        help='Toc filename.')
     extra.add_argument('--autodoc-options',
-                       dest='autodoc_options', type=set, default=AUTODOC_OPTIONS,
+                       dest='autodoc_options', type=list, default=AUTODOC_OPTIONS,
                        help='Sphinx Autodoc options. '
                        'If omitted, the value of environment variable '
                        'SPHINX_APIDOC_OPTIONS will be used.')
