@@ -6,21 +6,14 @@ import pytest
 
 from pyramid import *  # this is going to test package's __init__ exports
 
-__all__ = (
-    'flags',
-    'command',
-    'packagedir',
-    'pyramid_exe',
-)
-
 pyramid_exe = 'pyramid-apidoc'
 
-apidoc_compatible_templates_dir = os.path.join(os.path.abspath(__file__), 'data', 'templates', 'sphinx-compatible')
+apidoc_compatible_templates_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'templates', 'sphinx-compatible')
 
 apidoc_compatible_format_flags = [
-    '',  # default
-    '--format=apidoc',
-    '--format=template-apiodoc --templates-dir={}'.format(apidoc_compatible_templates_dir),
+    ('fmtdef', ''),  # default
+    ('fmtapi', '--format=apidoc'),
+    ('fmttpl', '--format=template-apidoc --templates-dir={}'.format(apidoc_compatible_templates_dir)),
 ]
 
 apidoc_flags = [
@@ -40,17 +33,22 @@ apidoc_test_flags = (
 )
 
 apidoc_commands = [
-    ("sphinx", 'sphinx-apidoc'),
+    ("cmpsphinx", 'sphinx-apidoc'),
 ]
 
 testpackages = [
-    ("testpackage", 'data/testpackage'),
+    ("pkgtest", 'data/testpackage'),
 ]
 
 
 @pytest.fixture(params=apidoc_test_flags)
-def flags(request):
+def config_flags(request):
     return ' '.join(request.param) + ' -o {outdir} {package}'
+
+
+@pytest.fixture(params=[e[1] for e in apidoc_compatible_format_flags], ids=[e[0] for e in apidoc_compatible_format_flags])
+def format_flags(request):
+    return request.param
 
 
 @pytest.fixture(params=[e[1] for e in apidoc_commands], ids=[e[0] for e in apidoc_commands])
