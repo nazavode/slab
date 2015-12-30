@@ -11,7 +11,13 @@ from .utils import (
     is_package,
     is_source,
     is_excluded,
-    get_module_imports,
+)
+
+__all__ = (
+    'build_tree',
+    'Node',
+    'Module',
+    'Directory',
 )
 
 
@@ -43,6 +49,10 @@ class Node(object):
         return self.qualname.__eq__(other.qualname)
 
 
+class Module(Node):
+    pass
+
+
 class Directory(Node):
 
     __default_excludes__ = frozenset([
@@ -54,7 +64,7 @@ class Directory(Node):
         super().__init__(path, root)
         self.excludes = excludes or self.__default_excludes__
         files, subdirs = listcontent(self.path)
-        self.is_package = is_package(self.path, filelist=files)
+        self.is_package = is_package(self.path)
         self.submodules = sorted(
                 Module(file, self.root) for file in sorted(files)
                 if is_source(file) and not is_excluded(file, self.excludes)
@@ -66,9 +76,3 @@ class Directory(Node):
         self.subpackages = sorted(filter(operator.attrgetter('is_package'), self.subdirs))
         self.is_empty = not self.submodules and not self.subdirs
 
-
-class Module(Node):
-
-    def __init__(self, path, root=None):
-        super().__init__(path, root)
-        self.imports = get_module_imports(self.path)

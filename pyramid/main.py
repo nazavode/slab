@@ -3,8 +3,10 @@
 import argparse
 import os
 
-from pyramid.core import build_tree, Module  # TODO
-from pyramid.formats import apidoc
+from .core import build_tree, Module  # TODO
+from .formats import apidoc
+from .config import AUTODOC_OPTIONS
+
 
 __all__ = (
     'main',
@@ -51,7 +53,7 @@ def get_parser(supported_formats):
     parser.add_argument('-o', '--output-dir', dest='destdir', action='store', type=argtype_dir_output,
                         help='Directory to place all output', required=True)
     parser.add_argument('-f', '--force', action='store_true', dest='force', default=False,
-                         help='Overwrite existing files')
+                        help='Overwrite existing files')
     #
     # Format options
     for format_cls in supported_formats.values():
@@ -64,6 +66,11 @@ def get_parser(supported_formats):
     extra.add_argument('--toc-filename',
                        dest='toc_filename', default='modules',
                        help='Toc filename.')
+    extra.add_argument('--autodoc-options',
+                       dest='autodoc_options', type=set, default=AUTODOC_OPTIONS,
+                       help='Sphinx Autodoc options. '
+                       'If omitted, the value of environment variable '
+                       'SPHINX_APIDOC_OPTIONS will be used.')
     return parser
 
 
@@ -91,7 +98,3 @@ def main(argv, enabled_formats=SUPPORTED_FORMATS):
                 outfile = os.path.abspath(os.path.join(args.destdir, docitem.qualname + '.' + args.suffix))
                 with open(outfile, open_mode) as f:
                     f.write(content)
-
-
-if __name__ == '__main__':
-    main(['aaa', '-o', 'PROVA', '/home/fficarelli/Projects/apscheduler/apscheduler'])

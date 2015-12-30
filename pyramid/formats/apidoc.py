@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
 
-"""
-
-###############################################################################
-# Apidoc text rendering - ReST format
-# Code adapted from the original sphinx.apidoc
-
-import os
 import functools
 
 from .base import FormatBase
@@ -17,38 +9,25 @@ __all__ = (
 )
 
 
-# Automodule options
-# Code adapted from the original sphinx.apidoc
-if 'SPHINX_APIDOC_OPTIONS' in os.environ:
-    APIDOC_OPTIONS = os.environ['SPHINX_APIDOC_OPTIONS'].split(',')
-else:
-    APIDOC_OPTIONS = [
-        'members',
-        'undoc-members',
-        # 'inherited-members', # disabled because there's a bug in sphinx
-        'show-inheritance',
-    ]
-
-
 class ApidocReSTFormat(FormatBase):
 
     def configure(self, opts):
         self.__pakage_impl = functools.partial(
-            apidoc_get_package,
+            render_package,
             include_submodules=not opts.separatemodules,
             headings=not opts.noheadings,
             modulefirst=opts.modulesfirst,
-            apidoc_options=opts.apidoc_options
+            autodoc_options=opts.autodoc_options
         )
         self.__toc_impl = functools.partial(
-            apidoc_get_modules_toc,
+            render_toc,
             header=opts.header,
             maxdepth=opts.maxdepth
         )
         self.__module_impl = functools.partial(
-            apidoc_get_module,
+            render_module,
             headings=not opts.noheadings,
-            apidoc_options=opts.apidoc_options
+            autodoc_options=opts.autodoc_options
         )
 
     def package(self, package):
@@ -84,14 +63,9 @@ class ApidocReSTFormat(FormatBase):
                             help='Don\'t create a table of contents file', default=False)
         apidoc.add_argument('-H', '--doc-project', action='store', dest='header',
                             help='Project name (default: root module name)')
-        apidoc.add_argument('--autodoc-options',
-                            dest='apidoc_options', type=set, default=APIDOC_OPTIONS,
-                            help='Sphinx Autodoc options. '
-                            'If omitted, the value of environment variable '
-                            'SPHINX_APIDOC_OPTIONS will be used.')
 
 
-def apidoc_format_heading(level, text):
+def format_heading(level, text):
     """Create a heading of <level> [1, 2 or 3 supported]."""
     underlining = {
         0: '',
@@ -102,19 +76,19 @@ def apidoc_format_heading(level, text):
     return '{}\n{}\n\n'.format(text, underlining[level]*len(text))
 
 
-def apidoc_get_module(module, headings, apidoc_options):
+def render_module(module, headings, autodoc_options):
     text = '.. automodule:: {}\n'.format(module.qualname)
-    for option in apidoc_options:
+    for option in autodoc_options:
         text += '    :{}:\n'.format(option)
     if headings:
-        text = apidoc_format_heading(1, '{} module'.format(module.qualname)) + text
+        text = format_heading(1, '{} module'.format(module.qualname)) + text
     return text
 
 
-def apidoc_get_modules_toc(modules, header, maxdepth):
+def render_toc(modules, header, maxdepth):
     if header is None:
         header = modules[0].qualname
-    text = apidoc_format_heading(1, '{}'.format(header)) + '.. toctree::\n'
+    text = format_heading(1, '{}'.format(header)) + '.. toctree::\n'
     if maxdepth is not None:
         text += '   :maxdepth: {}\n\n'.format(maxdepth)
     for module in sorted(modules):
@@ -122,35 +96,35 @@ def apidoc_get_modules_toc(modules, header, maxdepth):
     return text
 
 
-def apidoc_get_package(package, include_submodules, headings, modulefirst, apidoc_options):
+def render_package(package, include_submodules, headings, modulefirst, autodoc_options):
     # Init text buffer:
     text = ''
     # build a list of directories that are szvpackages (contain an INITPY file)
     # if there are some package directories, add a TOC for theses subpackages
     if package.subpackages:
-        text += apidoc_format_heading(2, 'Subpackages') + '.. toctree::\n\n' + \
+        text += format_heading(2, 'Subpackages') + '.. toctree::\n\n' + \
                 '\n'.join('    {}'.format(subpackage.qualname) for subpackage in package.subpackages) + '\n\n'
     # Build the submodules list:
     if package.submodules:
-        text += apidoc_format_heading(2, 'Submodules')
+        text += format_heading(2, 'Submodules')
         if include_submodules:
             for submodule in package.submodules:
                 if headings:
-                    text += apidoc_format_heading(2, '%s module' % submodule.qualname)
+                    text += format_heading(2, '%s module' % submodule.qualname)
                 # Force headings to disabled state as done by apidoc:
-                text += apidoc_get_module(submodule, headings=False, apidoc_options=apidoc_options)
+                text += render_module(submodule, headings=False, autodoc_options=autodoc_options)
         else:
             text += '.. toctree::\n\n' + \
                     '\n'.join('   {}'.format(submodule.qualname) for submodule in package.submodules)
         text += '\n\n'
     #
-    title = apidoc_format_heading(1, '{} package'.format(package.qualname))
+    title = format_heading(1, '{} package'.format(package.qualname))
     #
     if modulefirst:
         # Force headings to disabled state as done by apidoc:
-        text = title + apidoc_get_module(package, headings=False, apidoc_options=apidoc_options) + '\n' + text
+        text = title + render_module(package, headings=False, autodoc_options=autodoc_options) + '\n' + text
     else:
         # Force headings to disabled state as done by apidoc:
-        text = title + text + apidoc_format_heading(2, 'Module contents') + \
-               apidoc_get_module(package, headings=False, apidoc_options=apidoc_options)
+        text = title + text + format_heading(2, 'Module contents') + \
+               render_module(package, headings=False, autodoc_options=autodoc_options)
     return text

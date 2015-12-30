@@ -46,12 +46,8 @@ else:
 listcontent = __listcontent
 
 
-def is_package(path, filelist=None, initfile=INITPY_FILENAME):
-    if not os.path.isdir(path):
-        return False
-    if filelist is None:
-        filelist = os.listdir(path)
-    return initfile in (os.path.basename(filename) for filename in filelist)
+def is_package(path, initfile=INITPY_FILENAME):
+    return os.path.isfile(os.path.join(path, initfile))
 
 
 def is_source(path, suffixes=SOURCE_SUFFIXES):
@@ -76,10 +72,9 @@ def is_excluded(path, excludes):
 
 def get_module_imports(module_file):
 
-    class TopLevelImportsVisitor(ast.NodeVisitor):
+    imports = []
 
-        def __init__(self, store):
-            self._store = store
+    class __visitor(ast.NodeVisitor):
 
         @classmethod
         def repr_alias(cls, alias):
@@ -92,12 +87,12 @@ def get_module_imports(module_file):
             ).lstrip(', ')
 
         def visit_Import(self, node):
-            self._store.append('import {alias_list}'.format(
+            imports.append('import {alias_list}'.format(
                 alias_list=self.repr_alias_list(node)
             ))
 
         def visit_ImportFrom(self, node):
-            self._store.append('from {level}{module} import {alias_list}'.format(
+            imports.append('from {level}{module} import {alias_list}'.format(
                 level='.' * node.level,
                 module=node.module,
                 alias_list=self.repr_alias_list(node)
@@ -112,6 +107,5 @@ def get_module_imports(module_file):
     with open(module_file) as f:
         source = f.read()
     tree = ast.parse(source)
-    imports = []
-    TopLevelImportsVisitor(imports).visit(tree)
+    __visitor().visit(tree)
     return imports
