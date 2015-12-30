@@ -78,7 +78,6 @@ class TemplateMetaFormat(MetaFormatBase):
             metavar='TEMPLATES_DIR',
             dest='templates_dir', type=argtype_dir_input, default='.',
             help='The directory to be searched for template files.'
-
         )
         group.add_argument(
             '-K', '--template-extension',

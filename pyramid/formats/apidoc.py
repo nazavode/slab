@@ -42,27 +42,44 @@ class ApidocReSTFormat(FormatBase):
     @classmethod
     def add_arguments(cls, parser):
         apidoc = parser.add_argument_group('Apidoc format options', 'Options inherited from sphinx.apidoc command.')
-        apidoc.add_argument('-E', '--no-headings', action='store_true',
-                            dest='noheadings',
-                            help='Don\'t create headings for the module/package '
-                            'packages (e.g. when the docstrings already contain '
-                            'them)')
-        apidoc.add_argument('-e', '--separate', action='store_true',
-                            dest='separatemodules', default=False,
-                            help='Put documentation for each module on its own page')
-        apidoc.add_argument('-M', '--module-first', action='store_true',
-                            dest='modulesfirst', default=False,
-                            help='Put module documentation before submodule '
-                            'documentation')
-        apidoc.add_argument('-d', '--maxdepth', action='store', dest='maxdepth',
-                            help='Maximum depth of submodules to show in the TOC '
-                            '(default: 4)', type=int, default=4)
-        apidoc.add_argument('-s', '--suffix', action='store', dest='suffix',
-                            help='file suffix (default: rst)', default='rst')
-        apidoc.add_argument('-T', '--no-toc', action='store_true', dest='notoc',
-                            help='Don\'t create a table of contents file', default=False)
-        apidoc.add_argument('-H', '--doc-project', action='store', dest='header',
-                            help='Project name (default: root module name)')
+        apidoc.add_argument(
+            '-E', '--no-headings',
+            action='store_true', dest='noheadings', default=False,
+            help='don\'t create headings for the module/package '
+                 'packages (e.g. when the docstrings already contain '
+                 'them)'
+        )
+        apidoc.add_argument(
+            '-e', '--separate',
+            action='store_true', dest='separatemodules', default=False,
+            help='put documentation for each module on its own page'
+        )
+        apidoc.add_argument(
+            '-M', '--module-first',
+            action='store_true', dest='modulesfirst', default=False,
+            help='put module documentation before submodule '
+                 'documentation'
+        )
+        apidoc.add_argument(
+            '-d', '--maxdepth',
+            dest='maxdepth', type=int, default=4,
+            help='maximum depth of submodules to show in the TOC'
+        )
+        apidoc.add_argument(
+            '-s', '--suffix',
+            dest='suffix', default='rst',
+            help='output file suffix'
+        )
+        apidoc.add_argument(
+            '-T', '--no-toc',
+            action='store_true', dest='notoc', default=False,
+            help='don\'t create a table of contents file'
+        )
+        apidoc.add_argument(
+            '-H', '--doc-project',
+            dest='header',
+            help='Project name (default: root module name)'
+        )
 
 
 def format_heading(level, text):

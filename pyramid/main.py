@@ -21,30 +21,47 @@ def get_parser(supported_formats):
     )
     #
     # Positional arguments
-    parser.add_argument('root_dir', type=argtype_dir_input, help='root directory')
-    parser.add_argument('excludes', metavar='[exclude_path, ...]', nargs=argparse.REMAINDER)
+    parser.add_argument(
+        'root_dir', type=argtype_dir_input,
+        help='Root directory of the package to be documented.'
+    )
+    parser.add_argument(
+        'excludes', metavar='[exclude_path, ...]', nargs=argparse.REMAINDER,
+        help='Path to be excluded from search.'
+    )
     #
     # Common options
-    parser.add_argument('-o', '--output-dir', dest='destdir', action='store', type=argtype_dir_output,
-                        help='Directory to place all output', required=True)
-    parser.add_argument('-f', '--force', action='store_true', dest='force', default=False,
-                        help='Overwrite existing files')
+    parser.add_argument(
+        '-o', '--output-dir',
+        dest='destdir', type=argtype_dir_output, required=True,
+        help='Directory to place all output files.'
+    )
+    parser.add_argument(
+        '-f', '--force',
+        action='store_true', dest='force', default=False,
+        help='Overwrite existing files.'
+    )
     #
     # Format options
     add_arguments(parser)
     # Advanced common options
     extra = parser.add_argument_group('Advanced options')
-    extra.add_argument('--format',
-                       dest='format', default='apidoc', choices=supported_formats,
-                       help='Output format.')
-    extra.add_argument('--toc-filename',
-                       dest='toc_filename', default='modules',
-                       help='Toc filename.')
-    extra.add_argument('--autodoc-options',
-                       dest='autodoc_options', type=list, default=AUTODOC_OPTIONS,
-                       help='Sphinx Autodoc options. '
-                       'If omitted, the value of environment variable '
-                       'SPHINX_APIDOC_OPTIONS will be used.')
+    extra.add_argument(
+        '--format',
+        dest='format', choices=supported_formats, default='apidoc',
+        help='Output format.'
+    )
+    extra.add_argument(
+        '--toc-filename',
+        dest='toc_filename', default='modules',
+        help='Toc filename.'
+    )
+    extra.add_argument(
+        '--autodoc-options',
+        dest='autodoc_options', type=list, default=AUTODOC_OPTIONS,
+        help='Sphinx Autodoc options. If omitted, the value of '
+             'environment variable SPHINX_APIDOC_OPTIONS will be used.'
+    )
     return parser
 
 
