@@ -2,6 +2,7 @@
 
 import functools
 import itertools
+import operator
 
 from .utils import (
     get_node_name,
@@ -62,10 +63,7 @@ class Directory(Node):
             Directory(subdir, self.root, excludes) for subdir in sorted(subdirs)
             if not is_excluded(subdir, self.excludes)
         )
-        self.subpackages = sorted(
-            subdir for subdir in self.subdirs
-            if subdir.is_package
-        )
+        self.subpackages = sorted(filter(operator.attrgetter('is_package'), self.subdirs))
         self.is_empty = not self.submodules and not self.subdirs
 
 
