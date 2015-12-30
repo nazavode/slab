@@ -3,10 +3,10 @@
 import argparse
 import os
 
-from .core import build_tree, Module  # TODO
-from .formats import apidoc
+from .utils import argtype_dir_input, argtype_dir_output
 from .config import AUTODOC_OPTIONS
-
+from .core import build_tree, Module  # TODO
+from .formats import apidoc, template
 
 __all__ = (
     'main',
@@ -15,25 +15,8 @@ __all__ = (
 
 SUPPORTED_FORMATS = {
     'apidoc': apidoc.ApidocReSTFormat,
+    'template': template.TemplateMetaFormat,
 }
-
-
-def argtype_dir_input(arg):
-    if not os.path.exists(arg):
-        raise argparse.ArgumentTypeError("{} doesn't exist".format(arg))
-    elif not os.path.isdir(arg):
-        raise argparse.ArgumentTypeError("{} is not a directory".format(arg))
-    else:
-        return arg
-
-
-def argtype_dir_output(arg):
-        if not os.path.exists(arg):
-            os.makedirs(arg)
-        elif not os.path.isdir(arg):
-            raise argparse.ArgumentTypeError("{} is not a directory".format(arg))
-        else:
-            return arg
 
 
 def get_parser(supported_formats):
@@ -43,7 +26,10 @@ def get_parser(supported_formats):
             raise argparse.ArgumentTypeError("{} is not a supported format".format(arg))
         return supported_formats[arg]
 
-    parser = argparse.ArgumentParser(description='Process apidoc templates instantiating them in actual ReST files.')
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description='Process apidoc templates instantiating them in actual ReST files.'
+    )
     #
     # Positional arguments
     parser.add_argument('root_dir', type=argtype_dir_input, help='root directory')

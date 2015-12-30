@@ -40,3 +40,14 @@ class FormatBase(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def add_arguments(cls, parser):
         raise NotImplementedError()
+
+
+class MetaFormatBase(FormatBase):
+
+        def __init__(self, options, format):
+            super().__init__(options)
+            self._format = format
+
+        @property
+        def format(self):
+            return self._format

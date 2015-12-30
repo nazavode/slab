@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-import fnmatch
 import os
+import fnmatch
+import argparse
 
 from .config import INITPY_FILENAME, SOURCE_SUFFIXES
 
@@ -16,6 +17,8 @@ __all__ = (
     'listcontent',
     'is_excluded',
     'get_module_imports',
+    'argtype_dir_input',
+    'argtype_dir_output',
 )
 
 
@@ -109,3 +112,21 @@ def get_module_imports(module_file):
     tree = ast.parse(source)
     __visitor().visit(tree)
     return imports
+
+
+def argtype_dir_input(arg):
+    if not os.path.exists(arg):
+        raise argparse.ArgumentTypeError("{} doesn't exist".format(arg))
+    elif not os.path.isdir(arg):
+        raise argparse.ArgumentTypeError("{} is not a directory".format(arg))
+    else:
+        return arg
+
+
+def argtype_dir_output(arg):
+        if not os.path.exists(arg):
+            os.makedirs(arg)
+        elif not os.path.isdir(arg):
+            raise argparse.ArgumentTypeError("{} is not a directory".format(arg))
+        else:
+            return arg
