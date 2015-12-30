@@ -15,8 +15,16 @@ __all__ = (
 
 pyramid_exe = 'pyramid-apidoc'
 
+apidoc_compatible_templates_dir = os.path.join(os.path.abspath(__file__), 'data', 'templates', 'sphinx-compatible')
+
+apidoc_compatible_format_flags = [
+    '',  # default
+    '--format=apidoc',
+    '--format=template-apiodoc --templates-dir={}'.format(apidoc_compatible_templates_dir),
+]
+
 apidoc_flags = [
-    '',
+    '',  # all options to defaults
     '--module-first',
     '--separate',
     '--no-headings',
@@ -27,7 +35,7 @@ apidoc_flags = [
 
 apidoc_test_flags = (
     itertools.chain.from_iterable(
-            itertools.combinations(apidoc_flags, r=i) for i in range(len(apidoc_flags))
+        itertools.combinations(apidoc_flags, r=i) for i in range(len(apidoc_flags))
     )
 )
 
