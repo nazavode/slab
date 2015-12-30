@@ -44,9 +44,9 @@ class FormatBase(metaclass=abc.ABCMeta):
 
 class MetaFormatBase(FormatBase):
 
-        def __init__(self, options, format):
+        def __init__(self, options, format_cls):
+            self._format = format_cls(options)
             super().__init__(options)
-            self._format = format
 
         @property
         def format(self):

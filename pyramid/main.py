@@ -6,25 +6,14 @@ import os
 from .utils import argtype_dir_input, argtype_dir_output
 from .config import AUTODOC_OPTIONS
 from .core import build_tree, Module
-from .formats import apidoc, template
+from .formats import AVAILABLE_FORMATS, format_maker, add_arguments
 
 __all__ = (
     'main',
 )
 
 
-SUPPORTED_FORMATS = {
-    'apidoc': apidoc.ApidocReSTFormat,
-    'template': template.TemplateMetaFormat,
-}
-
-
 def get_parser(supported_formats):
-
-    def argtype_format(arg):
-        if arg not in supported_formats:
-            raise argparse.ArgumentTypeError("{} is not a supported format".format(arg))
-        return supported_formats[arg]
 
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -42,12 +31,11 @@ def get_parser(supported_formats):
                         help='Overwrite existing files')
     #
     # Format options
-    for format_cls in supported_formats.values():
-        format_cls.add_arguments(parser)
+    add_arguments(parser)
     # Advanced common options
     extra = parser.add_argument_group('Advanced options')
     extra.add_argument('--format',
-                       dest='format', type=argtype_format, default='apidoc', choices=supported_formats.keys(),
+                       dest='format', default='apidoc', choices=supported_formats,
                        help='Output format.')
     extra.add_argument('--toc-filename',
                        dest='toc_filename', default='modules',
@@ -60,13 +48,13 @@ def get_parser(supported_formats):
     return parser
 
 
-def main(argv, enabled_formats=SUPPORTED_FORMATS):
+def main(argv, enabled_formats=AVAILABLE_FORMATS):
     parser = get_parser(enabled_formats)
     args = parser.parse_args(argv[1:])
     # 1. Build element tree
     root = build_tree(args.root_dir)
     # 2. Init output format
-    format = args.format(args)
+    format = format_maker(args.format, args)
     # 3. Write toc if needed
     open_mode = 'x' if args.force else 'w'
     if not args.notoc:

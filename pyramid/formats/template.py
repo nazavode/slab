@@ -3,9 +3,11 @@
 from ..utils import argtype_dir_input, get_module_imports
 
 from .base import MetaFormatBase
+from .apidoc import ApidocReSTFormat
 
 __all__ = (
     'TemplateMetaFormat',
+    'TemplateApidocFormat',
 )
 
 
@@ -108,3 +110,9 @@ class TemplateMetaFormat(MetaFormatBase):
             help='Disables the template overriding behaviour. '
                  'When specified, only common templates will be used for generation of each file type.'
         )
+
+
+class TemplateApidocFormat(TemplateMetaFormat):
+
+    def __init__(self, options):
+        super().__init__(options, ApidocReSTFormat)
