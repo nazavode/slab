@@ -48,6 +48,15 @@ def get_parser(supported_formats):
     return parser
 
 
+def write(path, content, options):
+    if content:
+        if not options.force and os.path.exists(path):
+            print('File {} exists, skipping.'.format(path))
+        else:
+            with open(path, 'w') as f:
+                f.write(content)
+
+
 def main(argv, enabled_formats=AVAILABLE_FORMATS):
     parser = get_parser(enabled_formats)
     args = parser.parse_args(argv[1:])
@@ -56,11 +65,10 @@ def main(argv, enabled_formats=AVAILABLE_FORMATS):
     # 2. Init output format
     format = format_maker(args.format, args)
     # 3. Write toc if needed
-    open_mode = 'x' if args.force else 'w'
     if not args.notoc:
         toc = format.toc((root, ))
-        with open(os.path.join(args.destdir, args.toc_filename + '.' + args.suffix), open_mode) as f:
-            f.write(toc)
+        outfile = os.path.join(args.destdir, args.toc_filename + '.' + args.suffix)
+        write(outfile, toc, args)
     # 4. Generate and write all files
     excluded_types = set()
     if not args.separatemodules:
@@ -68,7 +76,5 @@ def main(argv, enabled_formats=AVAILABLE_FORMATS):
     for docitem in root.docitems():
         if docitem.__class__ not in excluded_types:
             content = format.render(docitem)
-            if content:
-                outfile = os.path.abspath(os.path.join(args.destdir, docitem.qualname + '.' + args.suffix))
-                with open(outfile, open_mode) as f:
-                    f.write(content)
+            outfile = os.path.abspath(os.path.join(args.destdir, docitem.qualname + '.' + args.suffix))
+            write(outfile, content, args)

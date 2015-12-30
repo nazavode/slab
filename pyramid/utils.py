@@ -128,5 +128,4 @@ def argtype_dir_output(arg):
             os.makedirs(arg)
         elif not os.path.isdir(arg):
             raise argparse.ArgumentTypeError("{} is not a directory".format(arg))
-        else:
-            return arg
+        return arg

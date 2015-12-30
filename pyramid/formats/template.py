@@ -68,7 +68,7 @@ class TemplateMetaFormat(MetaFormatBase):
         return self.__get_module_template(module).render(values)
 
     def toc(self, items):
-        return self.__get_toc_template(items).render(content=self.format.render(items))
+        return self.__get_toc_template(items).render(content=self.format.toc(items))
 
     @classmethod
     def add_arguments(cls, parser):
