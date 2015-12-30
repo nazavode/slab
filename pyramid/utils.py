@@ -21,7 +21,7 @@ __all__ = (
 
 if hasattr(os, 'scandir'):
     # New in Python 3.5, use if available.
-    def listcontent(path):
+    def __listcontent(path):
         subdirs = set()
         files = set()
         for entry in os.scandir(path):
@@ -32,7 +32,7 @@ if hasattr(os, 'scandir'):
         return files, subdirs
 else:
     # ...otherwise fallback to listdir().
-    def listcontent(path):
+    def __listcontent(path):
         subdirs = set()
         files = set()
         for entry in os.listdir(path):
@@ -42,6 +42,8 @@ else:
             else:
                 files.add(entry)
         return files, subdirs
+
+listcontent = __listcontent
 
 
 def is_package(path, filelist=None, initfile=INITPY_FILENAME):
