@@ -27,7 +27,7 @@ if hasattr(os, 'scandir'):
     def __listcontent(path):
         subdirs = set()
         files = set()
-        for entry in os.scandir(path):
+        for entry in os.scandir(path):  # pylint: disable=no-member
             if entry.is_dir():
                 subdirs.add(entry.path)
             else:
@@ -46,7 +46,7 @@ else:
                 files.add(entry)
         return files, subdirs
 
-listcontent = __listcontent
+listcontent = __listcontent  # pylint: disable=invalid-name
 
 
 def is_package(path, initfile=INITPY_FILENAME):
@@ -77,7 +77,7 @@ def get_module_imports(module_file):
 
     imports = []
 
-    class __visitor(ast.NodeVisitor):
+    class __visitor(ast.NodeVisitor):  # pylint: disable=invalid-name
 
         @classmethod
         def repr_alias(cls, alias):
@@ -89,26 +89,26 @@ def get_module_imports(module_file):
                 ', ' + cls.repr_alias(alias) for alias in node.names
             ).lstrip(', ')
 
-        def visit_Import(self, node):
+        def visit_Import(self, node):  # pylint: disable=invalid-name
             imports.append('import {alias_list}'.format(
                 alias_list=self.repr_alias_list(node)
             ))
 
-        def visit_ImportFrom(self, node):
+        def visit_ImportFrom(self, node):  # pylint: disable=invalid-name
             imports.append('from {level}{module} import {alias_list}'.format(
                 level='.' * node.level,
                 module=node.module,
                 alias_list=self.repr_alias_list(node)
             ))
 
-        def visit_ClassDef(self, node):
+        def visit_ClassDef(self, node):  # pylint: disable=invalid-name
             pass  # Cut subtree, we want top-level tokens only.
 
-        def visit_FunctionDef(self, node):
+        def visit_FunctionDef(self, node):  # pylint: disable=invalid-name
             pass  # Cut subtree, we want top-level tokens only.
 
-    with open(module_file) as f:
-        source = f.read()
+    with open(module_file, 'r') as infile:
+        source = infile.read()
     tree = ast.parse(source)
     __visitor().visit(tree)
     return imports
@@ -124,8 +124,8 @@ def argtype_dir_input(arg):
 
 
 def argtype_dir_output(arg):
-        if not os.path.exists(arg):
-            os.makedirs(arg)
-        elif not os.path.isdir(arg):
-            raise argparse.ArgumentTypeError("{} is not a directory".format(arg))
-        return arg
+    if not os.path.exists(arg):
+        os.makedirs(arg)
+    elif not os.path.isdir(arg):
+        raise argparse.ArgumentTypeError("{} is not a directory".format(arg))
+    return arg

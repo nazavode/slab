@@ -84,11 +84,11 @@ if __name__ == "__main__":
             'Development Status :: 4 - Beta',
             # audience:
             'Intended Audience :: Developers',
+            'Topic :: Software Development :: Documentation',
             # license:
             'License :: OSI Approved :: Apache Software License',
             # language:
             'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 2'
             'Operating System :: OS Independent',
         ],
         keywords='documentation sphinx apidoc templates',

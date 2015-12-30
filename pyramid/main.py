@@ -53,8 +53,8 @@ def write(path, content, options):
         if not options.force and os.path.exists(path):
             print('File {} exists, skipping.'.format(path))
         else:
-            with open(path, 'w') as f:
-                f.write(content)
+            with open(path, 'w') as outfile:
+                outfile.write(content)
 
 
 def main(argv, enabled_formats=AVAILABLE_FORMATS):
@@ -63,10 +63,10 @@ def main(argv, enabled_formats=AVAILABLE_FORMATS):
     # 1. Build element tree
     root = build_tree(args.root_dir)
     # 2. Init output format
-    format = format_maker(args.format, args)
+    fmt = format_maker(args.format, args)
     # 3. Write toc if needed
     if not args.notoc:
-        toc = format.toc((root, ))
+        toc = fmt.toc((root, ))
         outfile = os.path.join(args.destdir, args.toc_filename + '.' + args.suffix)
         write(outfile, toc, args)
     # 4. Generate and write all files
@@ -75,6 +75,6 @@ def main(argv, enabled_formats=AVAILABLE_FORMATS):
         excluded_types.add(Module)
     for docitem in root.docitems():
         if docitem.__class__ not in excluded_types:
-            content = format.render(docitem)
+            content = fmt.render(docitem)
             outfile = os.path.abspath(os.path.join(args.destdir, docitem.qualname + '.' + args.suffix))
             write(outfile, content, args)

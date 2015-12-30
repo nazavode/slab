@@ -15,7 +15,6 @@ class FormatBase(metaclass=abc.ABCMeta):
         self.configure(options)
 
     def render(self, item):
-        # TODO: make visitor
         if isinstance(item, Directory) and item.is_package:
             return self.package(item)
         elif isinstance(item, Module):
@@ -42,12 +41,12 @@ class FormatBase(metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
 
-class MetaFormatBase(FormatBase):
+class MetaFormatBase(FormatBase):  # pylint: disable=abstract-method
 
-        def __init__(self, options, format_cls):
-            self._format = format_cls(options)
-            super().__init__(options)
+    def __init__(self, options, format_cls):
+        self._format = format_cls(options)
+        super().__init__(options)
 
-        @property
-        def format(self):
-            return self._format
+    @property
+    def format(self):
+        return self._format

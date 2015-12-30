@@ -42,7 +42,7 @@ class TemplateMetaFormat(MetaFormatBase):
                     except jinja2.TemplateNotFound:
                         template = default_template
                     finally:
-                        return template
+                        return template  # pylint: disable=lost-exception
             return __get_template
 
         self.__get_module_template = __maker(module_template)
@@ -90,7 +90,7 @@ class TemplateMetaFormat(MetaFormatBase):
             '-P', '--package-template',
             dest='package_template', default='package.{TEMPLATE_EXT}',
             help='The template file to be used for all package files generation. '
-                  'If a relative path is provided, the file name will be searched in TEMPLATES_DIR.'
+                 'If a relative path is provided, the file name will be searched in TEMPLATES_DIR.'
         )
         group.add_argument(
             '-D', '--module-template',

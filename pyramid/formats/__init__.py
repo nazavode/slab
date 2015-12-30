@@ -12,7 +12,7 @@ __all__ = (
 )
 
 
-__formats = {
+__formats = {  # pylint: disable=invalid-name
     'apidoc': apidoc.ApidocReSTFormat,
     'template-apidoc': template.TemplateApidocFormat,
 }

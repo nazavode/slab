@@ -103,7 +103,8 @@ def render_package(package, include_submodules, headings, modulefirst, autodoc_o
     # if there are some package directories, add a TOC for theses subpackages
     if package.subpackages:
         text += format_heading(2, 'Subpackages') + '.. toctree::\n\n' + \
-                '\n'.join('    {}'.format(subpackage.qualname) for subpackage in package.subpackages) + '\n\n'
+                '\n'.join('    {}'.format(subpackage.qualname)  # pylint: disable=no-member
+                          for subpackage in package.subpackages) + '\n\n'
     # Build the submodules list:
     if package.submodules:
         text += format_heading(2, 'Submodules')
@@ -115,7 +116,8 @@ def render_package(package, include_submodules, headings, modulefirst, autodoc_o
                 text += render_module(submodule, headings=False, autodoc_options=autodoc_options)
         else:
             text += '.. toctree::\n\n' + \
-                    '\n'.join('   {}'.format(submodule.qualname) for submodule in package.submodules)
+                    '\n'.join('   {}'.format(submodule.qualname)  # pylint: disable=no-member
+                              for submodule in package.submodules)
         text += '\n\n'
     #
     title = format_heading(1, '{} package'.format(package.qualname))
