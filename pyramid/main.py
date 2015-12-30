@@ -50,6 +50,8 @@ def get_parser(supported_formats):
     # Common options
     parser.add_argument('-o', '--output-dir', dest='destdir', action='store', type=argtype_dir_output,
                         help='Directory to place all output', required=True)
+    parser.add_argument('-f', '--force', action='store_true', dest='force', default=False,
+                         help='Overwrite existing files')
     #
     # Format options
     for format_cls in supported_formats.values():
@@ -73,20 +75,21 @@ def main(argv, enabled_formats=SUPPORTED_FORMATS):
     # 2. Init output format
     format = args.format(args)
     # 3. Write toc if needed
+    open_mode = 'x' if args.force else 'w'
     if not args.notoc:
         toc = format.toc((root, ))
-        with open(os.path.join(args.destdir, args.toc_filename + '.' + args.suffix), 'w') as f:
+        with open(os.path.join(args.destdir, args.toc_filename + '.' + args.suffix), open_mode) as f:
             f.write(toc)
     # 4. Generate and write all files
     excluded_types = set()
-    if not args.separatemodules:  # TODO: this should be Format's responsibility
+    if not args.separatemodules:
         excluded_types.add(Module)
     for docitem in root.docitems():
         if docitem.__class__ not in excluded_types:
             content = format.render(docitem)
             if content:
                 outfile = os.path.abspath(os.path.join(args.destdir, docitem.qualname + '.' + args.suffix))
-                with open(outfile, 'w') as f:
+                with open(outfile, open_mode) as f:
                     f.write(content)
 
 
