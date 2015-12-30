@@ -90,7 +90,7 @@ def format_heading(level, text):
         2: '-',
         3: '~',
     }
-    return '{}\n{}\n\n'.format(text, underlining[level]*len(text))
+    return '{}\n{}\n\n'.format(text, underlining[level] * len(text))
 
 
 def render_module(module, headings, autodoc_options):
@@ -120,8 +120,8 @@ def render_package(package, include_submodules, headings, modulefirst, autodoc_o
     # if there are some package directories, add a TOC for theses subpackages
     if package.subpackages:
         text += format_heading(2, 'Subpackages') + '.. toctree::\n\n' + \
-                '\n'.join('    {}'.format(subpackage.qualname)  # pylint: disable=no-member
-                          for subpackage in package.subpackages) + '\n\n'
+            '\n'.join('    {}'.format(subpackage.qualname)  # pylint: disable=no-member
+                      for subpackage in package.subpackages) + '\n\n'
     # Build the submodules list:
     if package.submodules:
         text += format_heading(2, 'Submodules')
@@ -145,5 +145,5 @@ def render_package(package, include_submodules, headings, modulefirst, autodoc_o
     else:
         # Force headings to disabled state as done by apidoc:
         text = title + text + format_heading(2, 'Module contents') + \
-               render_module(package, headings=False, autodoc_options=autodoc_options)
+            render_module(package, headings=False, autodoc_options=autodoc_options)
     return text

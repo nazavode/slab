@@ -49,7 +49,6 @@ class TemplateMetaFormat(MetaFormatBase):
         self.__get_package_template = __maker(package_template)
         self.__get_toc_template = lambda items, default_template=toc_template: default_template
 
-
     def __get_values(self, item):
         return {
             'content': self.format.render(item),
