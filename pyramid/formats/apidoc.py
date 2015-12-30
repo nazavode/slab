@@ -8,6 +8,7 @@
 # Code adapted from the original sphinx.apidoc
 
 import os
+import functools
 
 from .base import FormatBase
 
@@ -31,31 +32,33 @@ else:
 
 class ApidocReSTFormat(FormatBase):
 
-    def configure(self, options):
-        self._opts = options
+    def configure(self, opts):
+        self.__pakage_impl = functools.partial(
+            apidoc_get_package,
+            include_submodules=not opts.separatemodules,
+            headings=not opts.noheadings,
+            modulefirst=opts.modulesfirst,
+            apidoc_options=opts.apidoc_options
+        )
+        self.__toc_impl = functools.partial(
+            apidoc_get_modules_toc,
+            header=opts.header,
+            maxdepth=opts.maxdepth
+        )
+        self.__module_impl = functools.partial(
+            apidoc_get_module,
+            headings=not opts.noheadings,
+            apidoc_options=opts.apidoc_options
+        )
 
     def package(self, package):
-        return apidoc_get_package(
-            package,
-            include_submodules=not self._opts.separatemodules,
-            headings=not self._opts.noheadings,
-            modulefirst=self._opts.modulesfirst,
-            apidoc_options=self._opts.apidoc_options
-        )
+        return self.__pakage_impl(package)
 
     def toc(self, items):
-        return apidoc_get_modules_toc(
-            items,
-            header=self._opts.header,
-            maxdepth=self._opts.maxdepth
-        )
+        return self.__toc_impl(items)
 
     def module(self, module):
-        return apidoc_get_module(
-            module,
-            headings=not self._opts.noheadings,
-            apidoc_options=self._opts.apidoc_options
-        )
+        return self.__module_impl(module)
 
     @classmethod
     def add_arguments(cls, parser):
@@ -140,8 +143,9 @@ def apidoc_get_package(package, include_submodules, headings, modulefirst, apido
             text += '.. toctree::\n\n' + \
                     '\n'.join('   {}'.format(submodule.qualname) for submodule in package.submodules)
         text += '\n\n'
-
+    #
     title = apidoc_format_heading(1, '{} package'.format(package.qualname))
+    #
     if modulefirst:
         # Force headings to disabled state as done by apidoc:
         text = title + apidoc_get_module(package, headings=False, apidoc_options=apidoc_options) + '\n' + text
@@ -149,5 +153,4 @@ def apidoc_get_package(package, include_submodules, headings, modulefirst, apido
         # Force headings to disabled state as done by apidoc:
         text = title + text + apidoc_format_heading(2, 'Module contents') + \
                apidoc_get_module(package, headings=False, apidoc_options=apidoc_options)
-
     return text
