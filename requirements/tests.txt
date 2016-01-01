@@ -1,0 +1,9 @@
+pytest
+pytest-cov
+pytest-sugar
+jinja2
+# Sphinx will be used for exact output match with
+# files produced by apshinx-apidoc.
+# I'm fixing Sphinx version to ensure no undocumented
+# changes in sphinx-apidoc output that would break tests.
+Sphinx==1.3.3
