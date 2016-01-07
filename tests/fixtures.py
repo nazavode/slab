@@ -4,7 +4,7 @@ import os
 import itertools
 import pytest
 
-from pyramid import *  # this is going to test package's __init__ exports
+from pyramid_apidoc import *  # this is going to test package's __init__ exports
 
 pyramid_exe = 'pyramid-apidoc'
 

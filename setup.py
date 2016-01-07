@@ -27,7 +27,7 @@ if __name__ == "__main__":
     try:
         py_dirname = DIRNAME
         sys.path.insert(0, py_dirname)
-        from pyramid import VERSION
+        from pyramid_apidoc import VERSION
 
         version = VERSION
     finally:
@@ -53,7 +53,7 @@ if __name__ == "__main__":
             scripts.append(filepath)
 
     # search packages
-    root_packages = ['pyramid']
+    root_packages = ['pyramid_apidoc']
     packages = []
     for package in root_packages:
         package_dirname = os.path.join(DIRNAME, package)
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     # Final setup
     setup(
-        name="pyramid",
+        name="pyramid-apidoc",
         version=version,
         requires=[],
         description="Improved apidoc generator for Sphinx",
