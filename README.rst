@@ -10,6 +10,7 @@ Synopsis
 Pyramid is a modular and customizable documentation stubs generator. It tries to be an improved
 (and compatible) version of ``sphinx-apidoc`` shipped with Sphinx_. 
 
+
 License
 =======
 
