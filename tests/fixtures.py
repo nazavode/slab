@@ -4,9 +4,9 @@ import os
 import itertools
 import pytest
 
-from pyramid_apidoc import *  # this is going to test package's __init__ exports
+from slab import *  # this is going to test package's __init__ exports
 
-pyramid_exe = 'pyramid-apidoc'
+slab_exe = 'slab-apidoc'
 
 apidoc_compatible_templates_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'templates', 'sphinx-compatible')
 

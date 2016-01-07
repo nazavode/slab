@@ -12,12 +12,12 @@ from fixtures import *
 
 def test_compare(config_flags, format_flags, command, packagedir, tmpdir):
     # Create output directories
-    my_outdir = str(tmpdir.join('pyramid'))
+    my_outdir = str(tmpdir.join('slab'))
     theirs_outdir = str(tmpdir.join('compare'))
     os.makedirs(my_outdir)
     os.makedirs(theirs_outdir)
     # Create command lines
-    my_cmdline = pyramid_exe + ' ' + format_flags + ' ' + config_flags.format(outdir=my_outdir, package=packagedir)
+    my_cmdline = slab_exe + ' ' + format_flags + ' ' + config_flags.format(outdir=my_outdir, package=packagedir)
     theirs_cmdline = command + ' ' + config_flags.format(outdir=theirs_outdir, package=packagedir)
     # Run commands
     assert subprocess.call(my_cmdline.split()) == 0
