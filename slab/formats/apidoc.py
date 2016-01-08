@@ -130,20 +130,19 @@ def render_package(package, include_submodules, headings, modulefirst, autodoc_o
                 if headings:
                     text += format_heading(2, '%s module' % submodule.qualname)
                 # Force headings to disabled state as done by apidoc:
-                text += render_module(submodule, headings=False, autodoc_options=autodoc_options)
+                text += render_module(submodule, headings=False, autodoc_options=autodoc_options) + '\n'
         else:
             text += '.. toctree::\n\n' + \
                     '\n'.join('   {}'.format(submodule.qualname)  # pylint: disable=no-member
-                              for submodule in package.submodules)
-        text += '\n\n'
+                              for submodule in package.submodules) + '\n'
     #
     title = format_heading(1, '{} package'.format(package.qualname))
     #
     if modulefirst:
         # Force headings to disabled state as done by apidoc:
-        text = title + render_module(package, headings=False, autodoc_options=autodoc_options) + '\n' + text
+        text = title + render_module(package, headings=False, autodoc_options=autodoc_options) + '\n' + text + '\n'
     else:
         # Force headings to disabled state as done by apidoc:
-        text = title + text + format_heading(2, 'Module contents') + \
+        text = title + text + '\n' + format_heading(2, 'Module contents') + \
             render_module(package, headings=False, autodoc_options=autodoc_options)
     return text
