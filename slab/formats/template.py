@@ -81,7 +81,7 @@ class TemplateMetaFormat(MetaFormatBase):
         group.add_argument(
             '-K', '--template-extension',
             metavar='TEMPLATE_EXT',
-            dest='template_extension', default='template',
+            dest='template_extension', default='rst',
             help='The extension to be used when looking for override files.'
         )
         group.add_argument(
