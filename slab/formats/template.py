@@ -61,8 +61,9 @@ class TemplateMetaFormat(MetaFormatBase):
 
     def module(self, module):
         values = self.__get_values(module)
-        imports = get_module_imports(module.path)
-        imports.append('from {} import *'.format(module.qualname))
+        # imports = get_module_imports(module.path)
+        # imports.append('from {} import *'.format(module.qualname))
+        imports = ['from {} import *'.format(module.qualname), ]
         values['imports'] = imports
         return self.__get_module_template(module).render(values)
 

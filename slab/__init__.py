@@ -18,6 +18,6 @@ VersionInfo = collections.namedtuple('VersionInfo', (
     'patch',
 ))
 
-VERSION_INFO = VersionInfo(major=0, minor=1, patch=1)
+VERSION_INFO = VersionInfo(major=0, minor=1, patch=2)
 
 VERSION = '.'.join(str(v) for v in VERSION_INFO)
