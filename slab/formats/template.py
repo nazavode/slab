@@ -63,7 +63,9 @@ class TemplateMetaFormat(MetaFormatBase):
 
     def module(self, module):
         values = self.__get_values(module)
-        values['imports'] = get_module_imports(module.path)
+        imports = get_module_imports(module.path)
+        imports.append('from {} import *'.format(module.qualname))
+        values['imports'] = imports
         return self.__get_module_template(module).render(values)
 
     def toc(self, items):
