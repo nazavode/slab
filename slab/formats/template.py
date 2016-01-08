@@ -38,11 +38,9 @@ class TemplateMetaFormat(MetaFormatBase):
                     return default_template
                 else:
                     try:
-                        template = env.get_template(node.qualname + template_extension)
+                        return env.get_template(node.qualname + '.' + template_extension)
                     except jinja2.TemplateNotFound:
-                        template = default_template
-                    finally:
-                        return template  # pylint: disable=lost-exception
+                        return default_template
             return __get_template
 
         self.__get_module_template = __maker(module_template)
