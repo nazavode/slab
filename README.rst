@@ -14,7 +14,7 @@ Slab is a modular and customizable documentation stubs generator. It tries to be
 License
 =======
 
-Pyramid is released under Apache Software License, copyright `Federico Ficarelli`_.
+Slab is released under Apache Software License, copyright `Federico Ficarelli`_.
 
 
 .. _Sphinx:
